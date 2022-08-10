@@ -25,6 +25,7 @@ const veg = new Food({
   fat: 0.7,
   carbs: 3.2,
   protein: 2.5,
+  max: 200,
 });
 
 const iterations = 1000000;
@@ -36,22 +37,8 @@ let bestSolution = new Solution({
     fat: 20,
     protein: 30,
   },
+  foods: [chicken, rice, veg],
   changeRate: 10,
-  foods: [
-    {
-      food: chicken,
-      grams: 100,
-    },
-    {
-      food: rice,
-      grams: 100,
-    },
-    {
-      food: veg,
-      grams: 100,
-      max: 200,
-    },
-  ],
 });
 
 console.log(chalk.bgBlue.black.bold('--- Macro Balancer by Ben Lamb ---'));

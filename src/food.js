@@ -5,5 +5,7 @@ export default class Food {
     this.fat = options.fat;
     this.carbs = options.carbs;
     this.protein = options.protein;
+    this.max = options.max;
+    this.grams = options.grams || 100;
   }
 }

@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import Food from './food.js';
 
 export default class Solution {
   constructor(options) {
@@ -13,11 +14,11 @@ export default class Solution {
     let totalFatKcal = 0;
     let totalProteinKcal = 0;
 
-    this.foods.forEach(({ food, grams }) => {
-      totalKcal += (food.kcal / 100) * grams;
-      totalCarbsKcal += (food.carbs / 100) * grams * 4;
-      totalFatKcal += (food.fat / 100) * grams * 9;
-      totalProteinKcal += (food.protein / 100) * grams * 4;
+    this.foods.forEach((food) => {
+      totalKcal += (food.kcal / 100) * food.grams;
+      totalCarbsKcal += (food.carbs / 100) * food.grams * 4;
+      totalFatKcal += (food.fat / 100) * food.grams * 9;
+      totalProteinKcal += (food.protein / 100) * food.grams * 4;
     });
 
     const carbsPct = (totalCarbsKcal / totalKcal) * 100;
@@ -33,18 +34,17 @@ export default class Solution {
   }
 
   mutate() {
-    const newFoods = this.foods.map(({ food, grams, max }) => {
+    const newFoods = this.foods.map((food) => {
       const change = Math.random() * (this.changeRate * 2) - this.changeRate;
-      let newGrams = grams + change;
-      if (max) {
-        newGrams = Math.min(newGrams, max);
+      let newGrams = food.grams + change;
+      if (food.max) {
+        newGrams = Math.min(newGrams, food.max);
       }
 
-      return {
-        food,
+      return new Food({
+        ...food,
         grams: newGrams,
-        max,
-      };
+      });
     });
 
     const newSol = this.copy();
@@ -53,16 +53,12 @@ export default class Solution {
   }
 
   copy() {
-    return new Solution({
-      targets: this.targets,
-      changeRate: this.changeRate,
-      foods: this.foods,
-    });
+    return new Solution({ ...this });
   }
 
   log() {
-    this.foods.forEach(({ food, grams }) => {
-      console.log(`${chalk.green(`${food.name}:`)} ${chalk.bgGreen.black.bold(`${Math.round(grams)}g`)}`);
+    this.foods.forEach((food) => {
+      console.log(`${chalk.green(`${food.name}:`)} ${chalk.bgGreen.black.bold(`${Math.round(food.grams)}g`)}`);
     });
   }
 }
