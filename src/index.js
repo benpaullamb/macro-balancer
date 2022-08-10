@@ -34,9 +34,9 @@ const veg = new Food({
   maxGrams: 200,
 });
 
-const iterations = 1000000;
+console.log(chalk.bgBlue.black.bold('--- Macro Balancer by Ben Lamb ---'));
 
-let bestSolution = new Solution({
+const solution = new Solution({
   targets: {
     calories: 700,
     carbs: 50,
@@ -47,15 +47,19 @@ let bestSolution = new Solution({
   changeRate: 10,
 });
 
-console.log(chalk.bgBlue.black.bold('--- Macro Balancer by Ben Lamb ---'));
+const findSolution = (startSolution, iterations = 1000000) => {
+  let bestSolution = startSolution;
 
-for (let i = 0; i < iterations; i++) {
-  const mutation = bestSolution.mutate();
+  for (let i = 0; i < iterations; i++) {
+    const mutation = bestSolution.mutate();
 
-  if (mutation.fitness() < bestSolution.fitness()) {
-    bestSolution = mutation;
-    logUpdate(`Fitness: ${bestSolution.fitness().toFixed(2)} ${chalk.gray(`(i: ${i})`)}`);
+    if (mutation.fitness() < bestSolution.fitness()) {
+      bestSolution = mutation;
+      logUpdate(`Fitness: ${bestSolution.fitness().toFixed(2)} ${chalk.gray(`(i: ${i})`)}`);
+    }
   }
-}
 
-bestSolution.log();
+  return bestSolution;
+};
+
+findSolution(solution).log();
