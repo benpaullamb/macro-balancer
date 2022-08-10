@@ -44,7 +44,7 @@ const solution = new Solution({
     protein: 30,
   },
   foods: [chicken, rice, veg],
-  changeRate: 10,
+  changeRate: 50,
 });
 
 const findSolution = (startSolution, iterations = 1000000) => {

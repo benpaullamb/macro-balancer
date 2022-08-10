@@ -57,5 +57,14 @@ export default class Solution {
     this.foods.forEach((food) => {
       console.log(`${chalk.green(`${food.name}:`)} ${chalk.bgGreen.black.bold(`${Math.round(food.grams)}g`)}`);
     });
+
+    const { carbsPct, fatPct, proteinPct, totalKcal } = this.macros();
+    console.log(
+      chalk.cyan(
+        `Carbs: ${carbsPct.toFixed(0)}% | Fat: ${fatPct.toFixed(0)}% | Protein: ${proteinPct.toFixed(
+          0
+        )}% | ${totalKcal.toFixed(0)}kcal`
+      )
+    );
   }
 }

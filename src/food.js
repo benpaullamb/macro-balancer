@@ -8,7 +8,7 @@ export default class Food {
 
   addGrams(newGrams) {
     const copy = this.copy();
-    const totalGrams = this.grams + newGrams;
+    const totalGrams = Math.max(this.grams + newGrams, 0);
     copy.grams = this.maxGrams ? Math.min(totalGrams, this.maxGrams) : totalGrams;
     return copy;
   }
