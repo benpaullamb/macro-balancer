@@ -31,7 +31,9 @@ const veg = new Food({
     carbs: 3.2,
     protein: 2.5,
   },
-  maxGrams: 200,
+  gramLimits: {
+    max: 200,
+  },
 });
 
 console.log(chalk.bgBlue.black.bold('--- Macro Balancer by Ben Lamb ---'));

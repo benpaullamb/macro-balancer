@@ -2,14 +2,13 @@ export default class Food {
   constructor(options) {
     this.name = options.name;
     this.nutritionPer100g = { ...options.nutritionPer100g };
-    this.maxGrams = options.maxGrams;
-    this.grams = options.grams || 100;
+    this.gramLimits = options.gramLimits;
+    this.grams = this.clampGrams(options.grams || 100);
   }
 
   addGrams(newGrams) {
     const copy = this.copy();
-    const totalGrams = Math.max(this.grams + newGrams, 0);
-    copy.grams = this.maxGrams ? Math.min(totalGrams, this.maxGrams) : totalGrams;
+    copy.grams = this.clampGrams(this.grams + newGrams);
     return copy;
   }
 
@@ -24,6 +23,20 @@ export default class Food {
   }
   get proteinKcal() {
     return (this.nutritionPer100g.protein / 100) * this.grams * 4;
+  }
+
+  clampGrams(grams) {
+    if (this.gramLimits?.fixed) {
+      return this.gramLimits.fixed;
+    }
+
+    let clamped = Math.max(grams, this.gramLimits?.min || 0);
+
+    if (this.gramLimits?.max) {
+      clamped = Math.min(clamped, this.gramLimits.max);
+    }
+
+    return clamped;
   }
 
   copy() {
