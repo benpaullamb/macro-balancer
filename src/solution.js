@@ -2,7 +2,7 @@ import chalk from 'chalk';
 
 export default class Solution {
   constructor(options) {
-    this.targets = options.targets;
+    this.targets = { ...options.targets };
     this.changeRate = options.changeRate;
     this.foods = options.foods;
   }
