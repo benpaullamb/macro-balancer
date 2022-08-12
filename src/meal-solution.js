@@ -1,6 +1,4 @@
-import chalk from 'chalk';
-
-export default class Solution {
+export default class MealSolution {
   constructor(options) {
     this.targets = { ...options.targets };
     this.changeRate = options.changeRate;
@@ -50,21 +48,17 @@ export default class Solution {
   }
 
   copy() {
-    return new Solution({ ...this });
+    return new MealSolution({ ...this });
   }
 
   log() {
-    this.foods.forEach((food) => {
-      console.log(`${chalk.green(`${food.name}:`)} ${chalk.bgGreen.black.bold(`${Math.round(food.grams)}g`)}`);
-    });
+    console.log(this.foods.map((food) => `${food.name}: ${Math.round(food.grams)}g`).join(' | '));
 
     const { carbsPct, fatPct, proteinPct, totalKcal } = this.macros();
     console.log(
-      chalk.cyan(
-        `Carbs: ${carbsPct.toFixed(0)}% | Fat: ${fatPct.toFixed(0)}% | Protein: ${proteinPct.toFixed(
-          0
-        )}% | ${totalKcal.toFixed(0)}kcal`
-      )
+      `Carbs: ${carbsPct.toFixed(0)}% | Fat: ${fatPct.toFixed(0)}% | Protein: ${proteinPct.toFixed(
+        0
+      )}% | ${totalKcal.toFixed(0)}kcal`
     );
   }
 }

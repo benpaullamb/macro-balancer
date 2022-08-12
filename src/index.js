@@ -1,7 +1,6 @@
 import logUpdate from 'log-update';
-import chalk from 'chalk';
 import Food from './food.js';
-import Solution from './solution.js';
+import MealSolution from './meal-solution.js';
 
 const chicken = new Food({
   name: 'Chicken Breast',
@@ -21,6 +20,9 @@ const rice = new Food({
     carbs: 31,
     protein: 3.7,
   },
+  gramLimits: {
+    max: 250,
+  },
 });
 
 const veg = new Food({
@@ -36,20 +38,13 @@ const veg = new Food({
   },
 });
 
-console.log(chalk.bgBlue.black.bold('--- Macro Balancer by Ben Lamb ---'));
+const rmhcMealSolution = (targets, foods, iterations = 1000000, changeRate = 50) => {
+  const startSolution = new MealSolution({
+    targets,
+    foods,
+    changeRate,
+  });
 
-const solution = new Solution({
-  targets: {
-    calories: 700,
-    carbs: 50,
-    fat: 20,
-    protein: 30,
-  },
-  foods: [chicken, rice, veg],
-  changeRate: 50,
-});
-
-const findSolution = (startSolution, iterations = 1000000) => {
   let bestSolution = startSolution;
 
   for (let i = 0; i < iterations; i++) {
@@ -57,11 +52,19 @@ const findSolution = (startSolution, iterations = 1000000) => {
 
     if (mutation.fitness() < bestSolution.fitness()) {
       bestSolution = mutation;
-      logUpdate(`Fitness: ${bestSolution.fitness().toFixed(2)} ${chalk.gray(`(i: ${i})`)}`);
+      logUpdate(`Fitness: ${bestSolution.fitness().toFixed(2)} (i: ${i})`);
     }
   }
 
   return bestSolution;
 };
 
-findSolution(solution).log();
+rmhcMealSolution(
+  {
+    calories: 700,
+    carbs: 50,
+    fat: 20,
+    protein: 30,
+  },
+  [chicken, rice, veg]
+).log();
