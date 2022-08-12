@@ -1,8 +1,9 @@
 import logUpdate from 'log-update';
+import chalk from 'chalk';
 import Food from './food.js';
 import MealSolution from './meal-solution.js';
 
-const chicken = new Food({
+const foodA = new Food({
   name: 'Chicken Breast',
   nutritionPer100g: {
     kcal: 106,
@@ -12,7 +13,7 @@ const chicken = new Food({
   },
 });
 
-const rice = new Food({
+const foodB = new Food({
   name: 'Wholegrain Rice',
   nutritionPer100g: {
     kcal: 164,
@@ -25,7 +26,7 @@ const rice = new Food({
   },
 });
 
-const veg = new Food({
+const foodC = new Food({
   name: 'Broccoli',
   nutritionPer100g: {
     kcal: 34,
@@ -39,32 +40,41 @@ const veg = new Food({
 });
 
 const rmhcMealSolution = (targets, foods, iterations = 1000000, changeRate = 50) => {
-  const startSolution = new MealSolution({
+  const solution = new MealSolution({
     targets,
     foods,
     changeRate,
   });
 
-  let bestSolution = startSolution;
+  solution.initRandomGrams();
+
+  let bestSolution = solution.grams;
+  let bestFitness = solution.fitness();
 
   for (let i = 0; i < iterations; i++) {
-    const mutation = bestSolution.mutate();
+    solution.mutate();
+    const mutatedFitness = solution.fitness();
 
-    if (mutation.fitness() < bestSolution.fitness()) {
-      bestSolution = mutation;
-      logUpdate(`Fitness: ${bestSolution.fitness().toFixed(2)} (i: ${i})`);
+    if (mutatedFitness < bestFitness) {
+      bestSolution = solution.grams;
+      bestFitness = mutatedFitness;
+      logUpdate(chalk.gray(`Fitness: ${bestFitness.toFixed(2)} (i: ${i})`));
+    } else {
+      solution.grams = bestSolution;
     }
   }
 
-  return bestSolution;
+  return solution;
 };
 
-rmhcMealSolution(
+const result = rmhcMealSolution(
   {
     calories: 700,
     carbs: 50,
     fat: 20,
     protein: 30,
   },
-  [chicken, rice, veg]
-).log();
+  [foodA, foodB, foodC]
+);
+
+result.log();
