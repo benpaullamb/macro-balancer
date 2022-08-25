@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { rmhcMealSolution } from '../rmhc';
 import Food from '../rmhc/food';
+import FoodForm from '../components/FoodForm';
 
 export default function Home() {
   const [config, setConfig] = useState({
@@ -46,10 +47,7 @@ export default function Home() {
   ]);
 
   const [results, setResults] = useState({
-    gramsFoodA: 0,
-    gramsFoodB: 0,
-    gramsFoodC: 0,
-
+    grams: [],
     calories: 0,
     fat: 0,
     carbs: 0,
@@ -61,7 +59,8 @@ export default function Home() {
     setConfig({ ...config, [prop]: value });
   };
 
-  const onFoodChange = (e, prop, food, i) => {
+  const onFoodChange = (e, prop, food) => {
+    const i = foods.findIndex(foodOption => foodOption === food);
     const changedFood = { ...food };
     changedFood[prop] = typeof food[prop] === 'number' ? Number(e.target.value) : e.target.value;
     const allChangedFood = [...foods];
@@ -122,9 +121,7 @@ export default function Home() {
       carbs,
       protein,
       calories: solution.totalCalories(),
-      gramsFoodA: solution.grams[0],
-      gramsFoodB: solution.grams[1],
-      gramsFoodC: solution.grams[2]
+      grams: solution.grams
     });
   };
 
@@ -199,89 +196,7 @@ export default function Home() {
       <hr className="mt-4" />
 
       {foods.map((food, i) => (
-        <div key={i}>
-          <span className="block text-2xl">Food {i + 1}</span>
-
-          <div>
-            <label className="block">Calories</label>
-            <input
-              className="block border border-black"
-              type="number"
-              min={0}
-              value={food.calories}
-              onChange={e => onFoodChange(e, 'calories', food, i)}
-            />
-          </div>
-          <div>
-            <label className="block">Fat</label>
-            <input
-              className="block border border-black"
-              type="number"
-              min={0}
-              value={food.fat}
-              onChange={e => onFoodChange(e, 'fat', food, i)}
-            />
-          </div>
-          <div>
-            <label className="block">Carbs</label>
-            <input
-              className="block border border-black"
-              type="number"
-              min={0}
-              value={food.carbs}
-              onChange={e => onFoodChange(e, 'carbs', food, i)}
-            />
-          </div>
-          <div>
-            <label className="block">Protein</label>
-            <input
-              className="block border border-black"
-              type="number"
-              min={0}
-              value={food.protein}
-              onChange={e => onFoodChange(e, 'protein', food, i)}
-            />
-          </div>
-          <div>
-            <label className="block">Name</label>
-            <input
-              className="block border border-black"
-              type="text"
-              value={food.name}
-              onChange={e => onFoodChange(e, 'name', food, i)}
-            />
-          </div>
-          <div>
-            <label className="block">Min</label>
-            <input
-              className="block border border-black"
-              type="number"
-              min={-1}
-              value={food.min}
-              onChange={e => onFoodChange(e, 'min', food, i)}
-            />
-          </div>
-          <div>
-            <label className="block">Max</label>
-            <input
-              className="block border border-black"
-              type="number"
-              min={-1}
-              value={food.max}
-              onChange={e => onFoodChange(e, 'max', food, i)}
-            />
-          </div>
-          <div>
-            <label className="block">Fixed</label>
-            <input
-              className="block border border-black"
-              type="number"
-              min={-1}
-              value={food.fixed}
-              onChange={e => onFoodChange(e, 'fixed', food, i)}
-            />
-          </div>
-        </div>
+        <FoodForm food={food} onFoodChange={onFoodChange} key={i} />
       ))}
 
       <button onClick={run} className="mt-4 border text-xl">
@@ -295,15 +210,11 @@ export default function Home() {
       <hr className="mt-4" />
       <span className="block text-2xl">Results</span>
 
-      <span className="block">
-        {config.nameFoodA} grams: {results.gramsFoodA}
-      </span>
-      <span className="block">
-        {config.nameFoodB} grams: {results.gramsFoodB}
-      </span>
-      <span className="block">
-        {config.nameFoodC} grams: {results.gramsFoodC}
-      </span>
+      {results.grams.map((gram, i) => (
+        <span className="block" key={i}>
+          {foods[i].name}: {gram}g
+        </span>
+      ))}
 
       <span className="block">Calories: {results.calories}</span>
       <span className="block">Fat: {results.fat}</span>
