@@ -4,6 +4,7 @@ import Food from '../rmhc/food';
 import FoodForm from '../components/FoodForm';
 import TextField from '../components/TextField';
 import Button from '../components/Button';
+import Results from '../components/Results';
 
 export default function Home() {
   const [config, setConfig] = useState({
@@ -192,18 +193,7 @@ export default function Home() {
         <Button onClick={addFood}>Add Food</Button>
       </div>
 
-      <span className="block text-2xl">Results</span>
-
-      {results.grams.map((gram, i) => (
-        <span className="block" key={i}>
-          {foods[i].name}: {Math.round(gram)}g
-        </span>
-      ))}
-
-      <span className="block">Calories: {Math.round(results.calories)}kcal</span>
-      <span className="block">Fat: {Math.round(results.fat)}%</span>
-      <span className="block">Carbs: {Math.round(results.carbs)}%</span>
-      <span className="block">Protein: {Math.round(results.protein)}%</span>
+      <Results foods={foods} results={results} />
     </div>
   );
 }
