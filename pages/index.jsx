@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { rmhcMealSolution } from '../rmhc';
 import Food from '../rmhc/food';
 import FoodForm from '../components/FoodForm';
+import TextField from '../components/TextField';
+import Button from '../components/Button';
 
 export default function Home() {
   const [config, setConfig] = useState({
@@ -126,66 +128,53 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <div className="p-4">
       <span className="block text-2xl">Settings</span>
 
-      <div>
-        <label className="block">Iterations</label>
-        <input
-          className="block border border-black"
-          type="number"
-          min={0}
-          value={config.iterations}
-          onChange={e => onConfigChange(e, 'iterations')}
-        />
-      </div>
-      <div>
-        <label className="block">Change Rate</label>
-        <input
-          className="block border border-black"
-          type="number"
-          min={0}
-          value={config.changeRate}
-          onChange={e => onConfigChange(e, 'changeRate')}
-        />
-      </div>
+      <TextField
+        label="Iterations"
+        className="mb-2"
+        type="number"
+        min={0}
+        value={config.iterations}
+        onChange={e => onConfigChange(e, 'iterations')}
+      />
+      <TextField
+        label="Change Rate"
+        className="mb-2"
+        type="number"
+        min={0}
+        value={config.changeRate}
+        onChange={e => onConfigChange(e, 'changeRate')}
+      />
 
       <span className="block">Targets</span>
 
-      <div>
-        <label className="block">Calories</label>
-        <input
-          className="block border border-black"
-          type="number"
-          min={0}
-          value={config.calories}
-          onChange={e => onConfigChange(e, 'calories')}
-        />
-      </div>
-      <div>
-        <label className="block">Fat</label>
-        <input
-          className="block border border-black"
+      <TextField
+        label="Calories"
+        className="mb-2"
+        type="number"
+        min={0}
+        value={config.calories}
+        onChange={e => onConfigChange(e, 'calories')}
+      />
+      <div className="mb-4 grid grid-cols-3 gap-2">
+        <TextField
+          label="Fat"
           type="number"
           min={0}
           value={config.fat}
           onChange={e => onConfigChange(e, 'fat')}
         />
-      </div>
-      <div>
-        <label className="block">Carbs</label>
-        <input
-          className="block border border-black"
+        <TextField
+          label="Carbs"
           type="number"
           min={0}
           value={config.carbs}
           onChange={e => onConfigChange(e, 'carbs')}
         />
-      </div>
-      <div>
-        <label className="block">Protein</label>
-        <input
-          className="block border border-black"
+        <TextField
+          label="Protein"
           type="number"
           min={0}
           value={config.protein}
@@ -193,33 +182,28 @@ export default function Home() {
         />
       </div>
 
-      <hr className="mt-4" />
-
       {foods.map((food, i) => (
-        <FoodForm food={food} onFoodChange={onFoodChange} key={i} />
+        <FoodForm food={food} onFoodChange={onFoodChange} key={i} className="mb-4" />
       ))}
 
-      <button onClick={run} className="mt-4 border text-xl">
-        Run
-      </button>
+      <div className="mb-4 grid grid-cols-2 gap-2">
+        <Button onClick={run}>Run</Button>
 
-      <button onClick={addFood} className="mt-4 border text-xl">
-        Add Food
-      </button>
+        <Button onClick={addFood}>Add Food</Button>
+      </div>
 
-      <hr className="mt-4" />
       <span className="block text-2xl">Results</span>
 
       {results.grams.map((gram, i) => (
         <span className="block" key={i}>
-          {foods[i].name}: {gram}g
+          {foods[i].name}: {Math.round(gram)}g
         </span>
       ))}
 
-      <span className="block">Calories: {results.calories}</span>
-      <span className="block">Fat: {results.fat}</span>
-      <span className="block">Carbs: {results.carbs}</span>
-      <span className="block">Protein: {results.protein}</span>
+      <span className="block">Calories: {Math.round(results.calories)}kcal</span>
+      <span className="block">Fat: {Math.round(results.fat)}%</span>
+      <span className="block">Carbs: {Math.round(results.carbs)}%</span>
+      <span className="block">Protein: {Math.round(results.protein)}%</span>
     </div>
   );
 }
